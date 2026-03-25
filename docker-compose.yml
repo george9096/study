@@ -1,0 +1,54 @@
+services:
+  app:
+    build: .
+    container_name: study-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/studydb
+      SPRING_DATASOURCE_USERNAME: studyuser
+      SPRING_DATASOURCE_PASSWORD: studypw
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_SESSION_STORE_TYPE: redis
+      SPRING_SQL_INIT_MODE: always
+
+  postgres:
+    image: postgres:16
+    container_name: study-postgres
+    environment:
+      POSTGRES_DB: studydb
+      POSTGRES_USER: studyuser
+      POSTGRES_PASSWORD: studypw
+    ports:
+      - "5432:5432"
+    volumes:
+      - study_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U studyuser -d studydb"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7
+    container_name: study-redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - study_redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  study_pgdata:
+  study_redisdata:
