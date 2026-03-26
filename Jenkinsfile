@@ -10,25 +10,25 @@ pipeline {
 
         stage('Show Files') {
             steps {
-                bat 'dir'
+                sh 'ls -al'
             }
         }
 
         stage('Docker Compose Down') {
             steps {
-                bat 'docker compose down'
+                sh 'docker-compose down'
             }
         }
 
         stage('Docker Compose Build Up') {
             steps {
-                bat 'docker compose up -d --build'
+                sh 'docker-compose up -d --build'
             }
         }
 
         stage('Check Running Containers') {
             steps {
-                bat 'docker compose ps'
+                sh 'docker-compose ps'
             }
         }
     }
