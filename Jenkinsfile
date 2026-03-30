@@ -21,7 +21,7 @@ node {
 
     stage('Health Check') {
         steps {
-            sh 'sleep 10'
+            sh 'sleep 11'
             sh 'curl -f http://localhost:8080/health'
         }
     }
