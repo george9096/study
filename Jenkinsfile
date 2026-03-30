@@ -20,9 +20,7 @@ node {
     }
 
     stage('Health Check') {
-        steps {
-            sh 'sleep 12'
-            sh 'curl -f http://localhost:8080/health'
-        }
+        sh 'sleep 12'
+        sh 'curl -f http://host.docker.internal:8080/health'
     }
 }

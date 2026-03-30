@@ -1,7 +1,6 @@
 services:
   app:
     build: .
-    container_name: study-app
     ports:
       - "8080:8080"
     depends_on:
@@ -20,7 +19,6 @@ services:
 
   postgres:
     image: postgres:16
-    container_name: study-postgres
     environment:
       POSTGRES_DB: studydb
       POSTGRES_USER: studyuser
@@ -37,7 +35,6 @@ services:
 
   redis:
     image: redis:7
-    container_name: study-redis
     ports:
       - "6379:6379"
     command: ["redis-server", "--appendonly", "yes"]
