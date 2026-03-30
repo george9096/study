@@ -1,8 +1,4 @@
 node {
-    stage('Clean Workspace') {
-        deleteDir()
-    }
-
     stage('Checkout') {
         checkout scm
     }
@@ -12,14 +8,21 @@ node {
     }
 
     stage('Docker Compose Down') {
-        sh 'docker-compose down'
+        sh 'docker-compose -p study-app down'
     }
 
     stage('Docker Compose Build Up') {
-        sh 'docker-compose up -d --build'
+        sh 'docker-compose -p study-app up -d --build'
     }
 
     stage('Check Running Containers') {
-        sh 'docker-compose ps'
+        sh 'docker-compose -p study-app ps'
+    }
+
+    stage('Health Check') {
+        steps {
+            sh 'sleep 10'
+            sh 'curl -f http://localhost:8080/health'
+        }
     }
 }
